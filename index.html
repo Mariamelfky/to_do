@@ -79,6 +79,7 @@
     let oldCheck =JSON.parse(localStorage.getItem(`name${i}`)) [1]
     let edited =prompt("",JSON.parse(localStorage.getItem(`name${i}`)) [0])
     localStorage.setItem(`name${i}`,JSON.stringify([edited,oldCheck]))
+    $("#tableBody").html("")
     elemnt(i).remove()
     elemntVar()
   } 
