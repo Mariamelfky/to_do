@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="main.css">
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>Todo list</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' media='screen' href='index.css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=calendar_month" />
+  <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script>
+  <!-- <script src='main.js'></script> -->
+</head>
+<body style="margin: 0;">
+<div>
+  <!-- center div -->
+  <div style="justify-content: center;align-items: center;display: flex;">
+    <!-- table -->
+    <div id="mainBox">
+      
+      <div id="head_box">
+        <h1 style="display: inline;">my tasks</h1>
+        <button onclick=addTask() id ="plus_button">
+          +
+        </button>
+      </div>
+      <div id ="tableBody" style="justify-content: center;align-items: center;">
+      </div>
+    </div>
+    <!-- end of tabel-->
+  </div>
+  <!-- end center div -->
+   
+  
+</div>
+<script type="text/javascript">
+  // localStorage.clear()
+  const D= new Date()
+  let Ddate =`${ D.getDate()}/${ D.getMonth()+1}/${ D.getFullYear()}`
+  function elemntVar()
+  {
+    for (let i =1;i<=localStorage.length;i++)
+        {
+          $("#tableBody").append(
+          `
+          <div class="elemntClass" id ="elemnt_div${i}">
+            <div style="width:80%;height:inherit;display: block">
+              <h2  id ="text_in_elemnt" >${JSON.parse(localStorage.getItem(`name${i}`)) [0]}</h2>
+              <div style="padding-left: 10px;color:rgba(147,147,147,255);display: flex;float:left;margin-top: 0px;margin-bottom: 0px;">
+                <span class="material-symbols-outlined">
+                  calendar_month
+                  </span> 
+                  <div style="padding-top: 5%;;">${Ddate}</div>
+              </div>
+            </div >
+            <div style="width:20%;height:inherit;justify-content: space-between;display: flex;margin-right:20px;">
+              <div onclick= edit(${i}) id="doneIcone"><img  height="100%" alt="edit" src="images/pen.png"></div>
+              <div onclick= check(${i})  class="editIcon"id="editIcon${i}"><img id="img${i}"   height="100%" alt="edit" src="images/check.png"></div>
+              <div onclick= remmove(${i})  id="binIcon"><img sty height="100%" alt="delete" src="images/bin.png"></div>
+            </div>  
+          </div>
+          `)
+          if (JSON.parse(localStorage.getItem(`name${i}`)) [1] )
+          {
+            $(`#img${i}`).attr ("src","images/false.png")
+            $(`#elemnt_div${i}`).css("background-color","#0acb07")
+          }
+          else
+          {
+            $(`#img${i}`).attr ("src","images/check.png")
+            $(`#elemnt_div${i}`).css("background-color","white")
+          }
+        }
+  }
+  let elemnt =(i)=>$(`#elemnt_div${i}`)
+  // let bGOfelemnt =(i)=>elemnt(i).css("ackground-color")
+  function edit(i)
+  {
+    let oldCheck =JSON.parse(localStorage.getItem(`name${i}`)) [1]
+    let edited =prompt("",JSON.parse(localStorage.getItem(`name${i}`)) [0])
+    localStorage.setItem(`name${i}`,JSON.stringify([edited,oldCheck]))
+    elemnt(i).remove()
+    elemntVar()
+  } 
+  function check(i)
+  {
+    if (JSON.parse(localStorage.getItem(`name${i}`)) [1]){
+      $(`#img${i}`).attr ("src","images/check.png") 
+      $(`#elemnt_div${i}`).css("background-color","white")
+      let value=JSON.parse(localStorage.getItem(`name${i}`)) [0]
+      localStorage.setItem(`name${i}`,JSON.stringify([value,false]))
+
+    }
+    else{
+      $(`#img${i}`).attr ("src","images/false.png")
+      $(`#elemnt_div${i}`).css("background-color","#0acb07")
+      let value=JSON.parse(localStorage.getItem(`name${i}`)) [0]
+      localStorage.setItem(`name${i}`,JSON.stringify([value,true]))
+    }
+  }
+
+  function remmove(i)
+  {
+    localStorage.removeItem(`name${i}`)
+    elemnt(i).remove()
+  }
+  elemntVar()
+  function  addTask()
+  {
+      let task= prompt("please enter the task")
+      if (task!="" && task!= null)
+      {
+        localStorage.setItem(`name${(localStorage.length)+1}`, JSON.stringify([task,false]))
+        $("#tableBody").html("")
+        elemntVar()
+      }
+  }
+  
+  
+
+</script>
+  
+</body>
+</html>
